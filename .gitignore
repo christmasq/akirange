@@ -31,6 +31,9 @@ bin/
 obj/
 TestResults/
 .vs/
+**/*.db
+**/*.db-shm
+**/*.db-wal
 
 # IDEs
 .idea/
