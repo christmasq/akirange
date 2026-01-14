@@ -38,9 +38,10 @@ namespace akirange_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlanId");
-
                     b.HasIndex("TaskId");
+
+                    b.HasIndex("PlanId", "TaskId")
+                        .IsUnique();
 
                     b.ToTable("CommitMappings");
                 });
@@ -51,13 +52,13 @@ namespace akirange_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAtUtc")
+                    b.Property<DateTime>("GeneratedAtUtc")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("EndAtUtc")
+                    b.Property<DateTime>("WindowEndUtc")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StartAtUtc")
+                    b.Property<DateTime>("WindowStartUtc")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -71,16 +72,21 @@ namespace akirange_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("EndAtUtc")
+                    b.Property<DateTime>("EndUtc")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("PlanId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StartAtUtc")
+                    b.Property<DateTime>("StartUtc")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("TaskId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TitleSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -104,8 +110,16 @@ namespace akirange_api.Migrations
                     b.Property<int>("DurationMinutes")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Notes")
+                    b.Property<TimeOnly?>("EarliestStartLocalTime")
                         .HasColumnType("TEXT");
+
+                    b.Property<TimeOnly?>("LatestEndLocalTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("OccurrencesPerWeek")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Title")
                         .IsRequired()

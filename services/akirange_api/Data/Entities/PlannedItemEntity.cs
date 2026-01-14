@@ -10,6 +10,7 @@ public class PlannedItemEntity
     public Guid TaskId { get; set; }
     public TaskEntity? Task { get; set; }
 
-    public DateTime StartAtUtc { get; set; }
-    public DateTime EndAtUtc { get; set; }
+    public string TitleSnapshot { get; set; } = string.Empty;
+    public DateTime StartUtc { get; set; }
+    public DateTime EndUtc { get; set; }
 }

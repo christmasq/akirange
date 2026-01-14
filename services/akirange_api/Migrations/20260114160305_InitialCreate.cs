@@ -16,9 +16,9 @@ namespace akirange_api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    StartAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EndAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CreatedAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    WindowStartUtc = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    WindowEndUtc = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    GeneratedAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,8 +31,10 @@ namespace akirange_api.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Title = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    Notes = table.Column<string>(type: "TEXT", nullable: true),
                     DurationMinutes = table.Column<int>(type: "INTEGER", nullable: false),
+                    OccurrencesPerWeek = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 1),
+                    EarliestStartLocalTime = table.Column<TimeOnly>(type: "TEXT", nullable: true),
+                    LatestEndLocalTime = table.Column<TimeOnly>(type: "TEXT", nullable: true),
                     CreatedAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -74,8 +76,9 @@ namespace akirange_api.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     PlanId = table.Column<Guid>(type: "TEXT", nullable: false),
                     TaskId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    StartAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EndAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    TitleSnapshot = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    StartUtc = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndUtc = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,9 +98,10 @@ namespace akirange_api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommitMappings_PlanId",
+                name: "IX_CommitMappings_PlanId_TaskId",
                 table: "CommitMappings",
-                column: "PlanId");
+                columns: new[] { "PlanId", "TaskId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CommitMappings_TaskId",

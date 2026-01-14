@@ -50,6 +50,12 @@
   - PlannedItemEntity
   - CommitMappingEntity（先預留）
 
+### A 段設計補強（為後續 Google 串接降風險）
+- PlanEntity 必須包含 windowStartUtc / windowEndUtc / generatedAtUtc（用於對齊 FreeBusy 時段計算與追溯）
+- PlannedItemEntity 必須包含 startUtc / endUtc（UTC），以支援後續 commit 寫回 Google
+- CommitMappingEntity 必須包含 planId + taskId，並建立唯一索引（PlanId, TaskId）避免重複 commit
+- 時間區間採用半開區間 [start, end) 避免相鄰時段重疊
+
 ### 驗收
 - `dotnet run` 成功
 - 可新增 Task 至 SQLite
@@ -82,6 +88,11 @@
 - 先不用 Google
 - 空檔固定為每天 **19:00–23:00（Asia/Taipei）**
 - 系統內部仍以 UTC 計算
+
+### Stub 空檔的時區轉換規則（Asia/Taipei → UTC）
+- Stub 空檔以「Asia/Taipei 當地日期」為基準定義：每天 19:00–23:00（local）
+- 實作時：先產生 localStart/localEnd（帶入 Asia/Taipei 時區），再轉成 UTC 存入 PlannedItem 的 startUtc/endUtc
+- 區間採用半開 [start, end)，避免邊界重疊
 
 ### API
 - `POST /plans/generate`
