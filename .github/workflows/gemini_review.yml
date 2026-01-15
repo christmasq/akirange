@@ -1,0 +1,25 @@
+name: Gemini PR Reviewer
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Gemini Code Review
+        uses: sshnaidm/gemini-code-review-action@v1
+        with:
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          model: "gemini-1.5-flash" # 可根據需求更換模型
+          # 可選：自定義審核提示語
+          prompt: "請作為一名資深工程師，審核以下程式碼變更，並針對安全性、可維護性提供建議。"
