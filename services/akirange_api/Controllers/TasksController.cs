@@ -50,18 +50,18 @@ public class TasksController : ControllerBase
 
         if (string.IsNullOrWhiteSpace(request.Title))
         {
-            return BadRequest(new { error = "title is required" });
+            return BadRequest(new { error = "title cannot be empty or whitespace" });
         }
 
         if (request.DurationMinutes <= 0)
         {
-            return BadRequest(new { error = "durationMinutes must be > 0" });
+            return BadRequest(new { error = "durationMinutes must be a positive value" });
         }
 
         var occurrencesPerWeek = request.OccurrencesPerWeek ?? 1;
         if (occurrencesPerWeek <= 0)
         {
-            return BadRequest(new { error = "occurrencesPerWeek must be > 0" });
+            return BadRequest(new { error = "occurrencesPerWeek must be a positive value" });
         }
 
         var entity = new TaskEntity
